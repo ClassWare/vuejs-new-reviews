@@ -1,38 +1,99 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1>{{ msgParm }}</h1>
     <p>
-      For guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://github.com/vuejs/vue-cli/tree/dev/docs" target="_blank">vue-cli documentation</a>.
+      Please enter search criteria
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank">babel</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org/en/essentials/getting-started.html" target="_blank">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org/en/intro.html" target="_blank">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org/en" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+
+    <div class="container">
+        <form>
+          <div class="form-group form-group-sm">
+            <label for="movieTitle">Title</label>
+            <input type="text" class="form-control" id="movieTitle" v-model="movieTitle" v-on:change="filterData()">
+            <label for="headLine">Headline</label>
+            <input type="text" class="form-control" id="headLine" v-model="headLine" v-on:change="filterData()">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" v-on:change="filterData()" > Critics Pick?</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success" @click.prevent="mySubmit">Submit</button>
+        </form>
+        <h3>Reviews</h3>
+        <p v-if="loading">
+          Loading
+        </p>
+        <div v-else>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Entry</th>
+                <th>Pick</th>
+                <th>Title</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="review in outReviews" @click="reviewClicked(review)">
+                <!-- <router-link to="/review" tag="tr" active-class="active">
+                    <a>ReviewDetails</a>
+                </router-link> -->
+                <td>{{ review.id }}</td>
+                <td><input type="checkbox" v-bind:checked="review.pick"></td>
+                <td>{{ review.title }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+    </div>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'ReviewSearch',
   props: {
-    msg: String
+    msgParm: String
+  },
+  data() {
+    return {
+      movieTitle: "",
+      headLine: "",
+      loading: true,
+      inReviews: [],
+      outReviews: []
+    }
+  },
+  mounted() {
+    this.loadData()
+  },
+  methods: {
+    mySubmit() {
+      console.log("NOT Submitted");
+    },
+    reviewClicked(review) {
+      console.log("REVIEW-CLICK " + review.id);
+    },
+    loadData() {
+      var url='https://jsonplaceholder.typicode.com/posts';
+      axios.get(url).then((response) => {
+        this.inReviews = response.data;
+        this.inReviews.forEach(function(obj, inx) {
+          if (inx % 2) { obj.pick = false; }
+          else { obj.pick = true; }
+        });
+        this.outReviews = this.inReviews;
+        this.loading = false;
+      });
+    },
+    filterData() {
+      // console.log("Title: " + this.movieTitle);
+      // console.log("Headline: " + this.headLine);
+      this.outReviews = this.inReviews.filter((rev) =>
+         rev.title.toLowerCase().indexOf(this.movieTitle.toLowerCase()) > -1
+      );
+    }
   }
 }
 </script>
