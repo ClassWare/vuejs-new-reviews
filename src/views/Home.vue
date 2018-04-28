@@ -1,18 +1,22 @@
 <template>
   <div class="home">
+    <h1>Simple Movie Review Search</h1>
     <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Buzzers Vue.js App"/>
+
+    <!-- This is where the HelloWorld component is injected -->
+    <ReviewSearch msg="Welcome to Review Search"/>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ReviewSearch from '@/components/ReviewSearch.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    ReviewSearch
   }
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is MY about page</h1>
+    <h1>Simple Movie Review Search</h1>
+    <p>
+      This is an example application which actually uses jsonplaceholder instead !
+    </p>
   </div>
 </template>
