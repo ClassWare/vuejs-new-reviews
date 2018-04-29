@@ -17,16 +17,22 @@
                 <input type="checkbox" v-on:change="filterData()" > Critics Pick?</label>
             </div>
           </div>
-          <button type="submit" class="btn btn-success" @click.prevent="mySubmit">Submit</button>
+
+          <button type="submit" class="btn btn-primary" @click.prevent="mySubmit">Submit</button>
+
         </form>
         <h3>Reviews</h3>
         <p v-if="loading">
           Loading
         </p>
         <div v-else>
+          <!-- Try outlet here -->
+          <router-view class="reviewDetails" name="reviewDetails"></router-view>
+
           <table class="table table-hover">
             <thead>
               <tr>
+                <th>Action</th>
                 <th>Entry</th>
                 <th>Pick</th>
                 <th>Title</th>
@@ -34,9 +40,10 @@
             </thead>
             <tbody>
               <tr v-for="review in outReviews" @click="reviewClicked(review)">
-                <!-- <router-link to="/review" tag="tr" active-class="active">
-                    <a>ReviewDetails</a>
-                </router-link> -->
+                <!-- <router-link to="/review" tag="tr" active-class="active"> -->
+                <router-link :to="{name:'reviewDetails', params:{bla:'zog'} }" tag="td" active-class="active">
+                    <a>X</a>
+                </router-link>
                 <td>{{ review.id }}</td>
                 <td><input type="checkbox" v-bind:checked="review.pick"></td>
                 <td>{{ review.title }}</td>
